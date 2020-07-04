@@ -207,6 +207,7 @@ main .jobs .job .period {
 
 .attribution {
     text-align: center;
+    padding: 20px;
 }
 
 /** Medias Queries **/
