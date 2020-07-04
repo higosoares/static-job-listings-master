@@ -1,20 +1,33 @@
 var categoriesSearched = [] 
 
-function searchByCategories() {
+document.addEventListener('click', event => {
   let jobs = JSON.parse(localStorage.getItem('jobs'))
-  
-  document.querySelectorAll('.tags').forEach(tag => {
-    tag.addEventListener('click', event => {
-      document.getElementById('search').style.display = 'flex'
 
-      let category = getObjectCategory(event.target)
-      categoriesSearched.push(category)
+  if (event.target) {
+    switch (event.target.className) {
+      case 'tag':
+        searchByCategory(event, jobs)
+        break;
+      case 'close':
+        removeCategorySearch(event, jobs)
+        break;
+      case 'clear':
+        clearSearch(jobs)
+        break;
+    }
+  }
+})
 
-      clearData()
-      populateData(getJobsFiltered(jobs))
-      populateCategorySearch(category)
-    })
-  })
+
+function searchByCategory(event, jobs) {
+  document.getElementById('search').style.display = 'flex'
+
+  let category = getObjectCategory(event.target)
+  categoriesSearched.push(category)
+
+  clearData()
+  populateData(getJobsFiltered(jobs))
+  populateCategorySearch(category)
 }
   
 function getObjectCategory(element) {
@@ -38,19 +51,15 @@ function populateCategorySearch(element) {
   categories.append(cloneDivCategory)
 }
   
-function removeCategorySearch() {
-  let jobs = JSON.parse(localStorage.getItem('jobs'))
-  let closes = document.querySelectorAll('.close')
+function removeCategorySearch(event, jobs) {
+  event.target.parentElement.remove()
+  clearData()
+  removeFromArrayCategoriesSearch(event.target)
+  populateData(getJobsFiltered(jobs))
 
-  closes.forEach(category => {
-    category.addEventListener('click', event => {
-      event.target.parentElement.remove()
-      clearData()
-      populateData(jobs)
-      removeFromArrayCategoriesSearch(event.target)
-    })
-    
-  })
+  if (categoriesSearched.length === 0) {
+    document.getElementById('search').style.display = 'none'
+  }
 }
   
 function removeFromArrayCategoriesSearch(element){
@@ -59,16 +68,12 @@ function removeFromArrayCategoriesSearch(element){
   categoriesSearched.pop(category)
 }
   
-function clearSearch() {
-  let jobs = JSON.parse(localStorage.getItem('jobs'))
-
-  document.getElementById('clear').addEventListener('click', event => {
-    clearData()
-    populateData(jobs)
-    removeCategoriesSearch()
-    categoriesSearched = []
-    document.getElementById('search').style.display = ''
-  })
+function clearSearch(jobs) {
+  clearData()
+  populateData(jobs)
+  removeCategoriesSearch()
+  categoriesSearched = []
+  document.getElementById('search').style.display = 'none'
 }
   
 function removeCategoriesSearch() {

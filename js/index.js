@@ -34,10 +34,6 @@ function populateData(json) {
   if (localStorage.getItem('jobs') === null) {
     localStorage.setItem('jobs', JSON.stringify(json))
   }
-
-  searchByCategories()
-  clearSearch()
-  removeCategorySearch()
 }
 
 function populateJob(data, divJob) {
