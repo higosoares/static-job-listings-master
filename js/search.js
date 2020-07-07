@@ -23,11 +23,14 @@ function searchByCategory(event, jobs) {
   document.getElementById('search').style.display = 'flex'
 
   let category = getObjectCategory(event.target)
-  categoriesSearched.push(category)
 
-  clearData()
-  populateData(getJobsFiltered(jobs))
-  populateCategorySearch(category)
+  if (!categoryExists(category.value)) {
+    categoriesSearched.push(category)
+
+    clearData()
+    populateData(getJobsFiltered(jobs))
+    populateCategorySearch(category)
+  }
 }
   
 function getObjectCategory(element) {
@@ -101,6 +104,14 @@ function searchInArrayCategories(job) {
   })
 
   return count
+}
+
+function categoryExists(value) {
+  function exits(category) { 
+    return category.value === value;
+  }
+
+  return categoriesSearched.find(exits);
 }
   
 function clearData() {
